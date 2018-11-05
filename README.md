@@ -53,6 +53,6 @@ python interplanetary_album.py
 
 ![uploadImg3](img/uploadImg3.png)
 
-![uploadImg4](img/uploadImg41.png)
+![uploadImg4](img/uploadImg4.png)
 
 ![uploadImg5](img/uploadImg5.png)
