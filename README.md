@@ -9,9 +9,9 @@ Welcome to Interplanetary Album, a decentralized Album is waiting for your.
 - [3. Setting up the environment](#3-setting-up-the-environment)
 - [4. Run your dApp](#4-run-your-dapp)
 - [5. Use your dApp](#5-use-your-dapp)
-    - [Unlock your Identity](#unlock-your-identity)
-    - [Enjoy your Photos](#enjoy-your-photos)
-    - [Upload your Photos](#upload-your-photos)
+    - [5.1. Unlock your Identity](#51-unlock-your-identity)
+    - [5.2. Enjoy your Photos](#52-enjoy-your-photos)
+    - [5.3. Upload your Photos](#53-upload-your-photos)
 
 <!-- /TOC -->
 
@@ -37,15 +37,15 @@ python interplanetary_album.py
 
 ## 5. Use your dApp
 
-### Unlock your Identity
+### 5.1. Unlock your Identity
 
 ![loginSuccessful](img/loginSuccessful.png)
 
-### Enjoy your Photos
+### 5.2. Enjoy your Photos
 
 ![cardAlbum](img/cardAlbum.png)
 
-### Upload your Photos
+### 5.3. Upload your Photos
 
 ![uploadImg1](img/uploadImg1.png)
 
