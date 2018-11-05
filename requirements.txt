@@ -1,0 +1,6 @@
+Flask
+Pillow
+Flask-JSGlue
+ipfsapi==0.4.3
+ontology-python-sdk==0.1.12
+Werkzeug==0.14.1
