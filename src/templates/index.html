@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html xmlns="">
+<head>
+    <meta charset="UTF-8">
+    <title>IPAlbum - A Distributed Album</title>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.4.6/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.4.6/lib/theme-chalk/index.css">
+    {{ JSGlue.include() }}
+    <!-- import favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+<div id="vue-app" style="width:1400px; margin:auto">
+    <el-tabs type="border-card" stretch @tab-click="tabClickHandler">
+        <el-tab-pane label="Collapse Album">
+            <div class="block">
+                <el-carousel height="900px">
+                    <el-carousel-item v-for="(item,index) in albumArray" :key="item">
+                        <div align=center>
+                            <img width="100%" :src="item"/>
+                        </div>
+                    </el-carousel-item>
+                </el-carousel>
+            </div>
+        </el-tab-pane>
+
+        <el-tab-pane label="Card Album">
+            <el-row :gutter="12">
+                <el-col :span="8" v-for="(item, index) in albumArray" :key="item">
+                    <el-card :body-style="{ padding: '0px' }" shadow="hover">
+                        <div align=center>
+                            <img width="100%" height="600px" :src="item" display="block">
+                        </div>
+                        <div style="padding: 14px;">
+                            <div class="bottom clearfix">
+                                <el-button-group>
+                                    <el-button type="primary" icon="el-icon-picture"
+                                               @click="viewOriginalImg(item)"></el-button>
+                                    <el-button type="primary" icon="el-icon-share"
+                                               @click="shareIpfsAddress(item)"></el-button>
+                                    <el-button type="primary" icon="el-icon-delete"></el-button>
+                                </el-button-group>
+                            </div>
+                        </div>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </el-tab-pane>
+
+        <el-tab-pane label="Upload Picture">
+            <div class="el-row is-justify-center el-row--flex">
+                <el-upload
+                        class="avatar-uploader"
+                        drag
+                        action="upload_file"
+                        multiple
+                        show-file-list
+                        ref="upload"
+                        :auto-upload="false"
+                        :before-upload="beforeUpload"
+                        :on-success="handleUploadSuccess"
+                        :on-error="handleUploadError">
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
+                    <div class="el-upload__tip" slot="tip">jpeg/png/bmp files with a size less than 10MB</div>
+                    <div class="el-upload__tip" slot="tip">
+                        <el-row>
+                            <div style="margin-bottom: 10px;">
+                                <el-button size="small" type="success" @click="submitUpload">
+                                    upload to IPFS
+                                </el-button>
+                            </div>
+                        </el-row>
+                    </div>
+                </el-upload>
+            </div>
+            <div style="width:2000px; margin:auto" align=center>
+                <el-dialog
+                        title="The decentralized album awaits!"
+                        :visible.sync="uploadDialogVisible"
+                        width="40%">
+                    <el-row :gutter="25"><img src="static/favicon.jpg" height="200px" alt=""></el-row>
+                    <el-form :model="uploadForm" status-icon ref="uploadForm" label-width="120px"
+                             class="demo-ruleForm">
+                        <el-row :gutter="25">
+                            <el-col :span="10">
+                                <el-form-item label="Payer Account">
+                                    <el-cascader
+                                            expand-trigger="hover"
+                                            filterable
+                                            :options="settingForm.accountOptions"
+                                            v-model="settingForm.accountSelected">
+                                    </el-cascader>
+
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="14">
+                                <el-input
+                                        v-model="settingForm.b58AddressSelected"
+                                        :disabled="true">
+                                </el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-form-item label="Password" prop="pass">
+                                <div class="block" style="margin-bottom: 15px;">
+                                    <el-input suffix-icon="el-icon-edit-outline" type="password"
+                                              v-model="uploadForm.uploadPayAcctPass">
+                                    </el-input>
+                                </div>
+                            </el-form-item>
+                        </el-row>
+                    </el-form>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="uploadDialogVisible = false">Cancel</el-button>
+                        <el-button type="primary" @click="unlockWalletAccount">Confirm</el-button>
+                    </span>
+                </el-dialog>
+            </div>
+        </el-tab-pane>
+
+        <el-tab-pane label="Information Query">
+            <div style="margin-bottom: 15px;">
+                <el-row :gutter="20">
+                    <el-col :span="24">
+                        <el-input
+                                placeholder="Please input TxHash"
+                                type="string"
+                                v-model="eventKey"
+                                class="input-with-select">
+                            <el-select v-model="eventInfoSelect" slot="prepend" placeholder="Select">
+                                <el-option label="State" value="State"/>
+                                </el-option>
+                                <el-option label="GasConsumed" value="GasConsumed"></el-option>
+                                <el-option label="Notify" value="Notify"></el-option>
+                            </el-select>
+                            <el-button slot="append" icon="el-icon-search" @click="queryEvent"></el-button>
+                        </el-input>
+                    </el-col>
+                </el-row>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <el-row :gutter="20">
+                    <el-col :span="24">
+                        <el-input
+                                placeholder="Please input base58 encode address"
+                                type="string"
+                                v-model="assetKey"
+                                class="input-with-select">
+                            <el-select v-model="assetSelect" slot="prepend" placeholder="Select">
+                                <el-option label="ONT" value="ONT"></el-option>
+                                <el-option label="ONG" value="ONG"></el-option>
+                            </el-select>
+                            <el-button slot="append" icon="el-icon-search" @click="queryBalance"></el-button>
+                        </el-input>
+                    </el-col>
+                </el-row>
+            </div>
+        </el-tab-pane>
+
+        <el-tab-pane label="DApp Settings">
+            <div style="margin-bottom: 5px;">
+                <el-form :label-position="labelPosition" label-width="150px" :model="settingForm">
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <el-form-item label="Default Network ">
+                                <el-cascader
+                                        expand-trigger="hover"
+                                        filterable
+                                        :options="settingForm.networkOptions"
+                                        v-model="settingForm.networkSelected"
+                                        @change="networkChange">
+                                </el-cascader>
+                            </el-form-item>
+                        </el-col>
+
+                        <el-col :span="12">
+                            <el-form-item label="Contract Address">
+                                <el-input
+                                        v-model="settingForm.contractAddress"
+                                        :disabled="true">
+                                    <template slot="prepend">0x</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-button icon="el-icon-edit" type="success" @click.prevent="changeContract">
+                                Change Contract
+                            </el-button>
+                        </el-col>
+                    </el-row>
+
+                    <el-row :gutter="25">
+
+                        <el-col :span="6">
+                            <el-form-item label="Default Account ">
+                                <el-cascader
+                                        expand-trigger="hover"
+                                        filterable
+                                        :options="settingForm.accountOptions"
+                                        v-model="settingForm.accountSelected"
+                                        @change="accountChange">
+                                </el-cascader>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-input
+                                    v-model="settingForm.b58AddressSelected"
+                                    :disabled="true">
+                            </el-input>
+                        </el-col>
+
+                        <el-col :span="10">
+                            <div class="grid-content bg-purple">
+                                <el-button-group>
+                                    <el-button icon="el-icon-edit" type="success" @click="createAccount">
+                                        Create Account
+                                    </el-button>
+                                    <el-button icon="el-icon-upload" type="primary" @click="importAccount">
+                                        Import Account
+                                    </el-button>
+                                    <el-button icon="el-icon-delete" type="warning" @click="removeAccount">
+                                        Remove Account
+                                    </el-button>
+                                </el-button-group>
+                                <el-dialog
+                                        title="Create successful"
+                                        width="35%"
+                                        :visible.sync="settingForm.newAccountPrivateKeyDialogVisible"
+                                        :close-on-click-modal="false"
+                                        :before-close="clearNewAccountHexPrivateKey"
+                                        :show-close="false"
+                                        :close-on-press-escape="false">
+                                    <div class="block" style="margin-bottom: 15px;">
+                                        <el-input
+                                                v-model="settingForm.newAccountHexPrivateKey"
+                                                size="small"
+                                                suffix-icon="el-icon-edit-outline"
+                                                :disabled="true">
+                                            <template slot="prepend">private key:</template>
+                                        </el-input>
+                                    </div>
+                                    <span slot="footer" class="dialog-footer">
+                                        <el-button type="primary"
+                                                   @click="settingForm.newAccountPrivateKeyDialogVisible = false">
+                                            Confirm
+                                        </el-button>
+                                    </span>
+                                </el-dialog>
+                            </div>
+                        </el-col>
+
+                    </el-row>
+                </el-form>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <el-form :label-position="labelPosition" label-width="150px" :model="settingForm">
+                    <el-row :gutter="25">
+                        <el-col :span="6">
+                            <el-form-item label="Default Identity">
+                                <el-cascader
+                                        expand-trigger="hover"
+                                        filterable
+                                        :options="settingForm.identityOptions"
+                                        v-model="settingForm.identitySelected"
+                                        @change="identityChange">
+                                </el-cascader>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-input
+                                    v-model="settingForm.ontIdSelected"
+                                    :disabled="true">
+                            </el-input>
+                        </el-col>
+                        <el-col :span="10">
+                            <el-button-group>
+                                <el-button icon="el-icon-edit" type="success" @click="createIdentity">
+                                    Create Identity&nbsp;
+                                </el-button>
+                                <el-button icon="el-icon-upload" type="primary" @click="importIdentity">
+                                    Import Identity&nbsp;&nbsp;
+                                </el-button>
+                                <el-button icon="el-icon-delete" type="warning" @click="removeIdentity">
+                                    Remove Identity&nbsp;
+                                </el-button>
+                            </el-button-group>
+                            <el-dialog
+                                    title="Create successful"
+                                    width="35%"
+                                    :visible.sync="settingForm.newIdentityPrivateKeyDialogVisible"
+                                    :close-on-click-modal="false"
+                                    :before-close="clearNewIdentityHexPrivateKey"
+                                    :show-close="false"
+                                    :close-on-press-escape="false">
+                                <div class="block" style="margin-bottom: 15px;">
+                                    <el-input
+                                            v-model="settingForm.newIdentityHexPrivateKey"
+                                            size="small"
+                                            suffix-icon="el-icon-edit-outline"
+                                            :disabled="true">
+                                        <template slot="prepend">private key:</template>
+                                    </el-input>
+                                </div>
+                                <span slot="footer" class="dialog-footer">
+                                        <el-button type="primary"
+                                                   @click="settingForm.newIdentityPrivateKeyDialogVisible = false">
+                                            Confirm
+                                        </el-button>
+                                    </span>
+                            </el-dialog>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+        </el-tab-pane>
+
+    </el-tabs>
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue@2.5.17/dist/vue.js"></script>
+<script src="https://unpkg.com/axios@0.18.0/dist/axios.min.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui@2.4.6/lib/index.js"></script>
+<script src="https://unpkg.com/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="{{ url_for('static', filename='js/information-query.js') }}"></script>
+<script src="{{ url_for('static', filename='js/upload-picture.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dapp-setting.js') }}"></script>
+<script src="{{ url_for('static', filename='js/card-album.js') }}"></script>
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</html>
