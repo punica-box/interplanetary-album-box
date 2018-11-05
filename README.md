@@ -12,6 +12,7 @@ Welcome to Interplanetary Album, a decentralized Album is waiting for your.
     - [5.1. Unlock your Identity](#51-unlock-your-identity)
     - [5.2. Enjoy your Photos](#52-enjoy-your-photos)
     - [5.3. Upload your Photos](#53-upload-your-photos)
+    - [5.4. dApp Settings](#54-dapp-settings)
 
 <!-- /TOC -->
 
@@ -20,6 +21,12 @@ Welcome to Interplanetary Album, a decentralized Album is waiting for your.
 ## 2. Architecture
 
 ## 3. Setting up the environment
+
+There are a few technical requirements before we start. Please install the following:
+
+- [python 3.7](https://www.python.org/downloads/release/python-370/)
+- [git](https://git-scm.com/)
+- [go-ipfs](https://dist.ipfs.io/#go-ipfs)
 
 ## 4. Run your dApp
 
@@ -56,3 +63,7 @@ python interplanetary_album.py
 ![uploadImg4](img/uploadImg4.png)
 
 ![uploadImg5](img/uploadImg5.png)
+
+### 5.4. dApp Settings
+
+![dAppSettings](img/dAppSettings.png)
