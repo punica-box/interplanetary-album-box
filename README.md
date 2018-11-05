@@ -20,6 +20,8 @@ Welcome to Interplanetary Album, a decentralized Album is waiting for your.
 
 ## 2. Architecture
 
+<div align=center><img height="800" src="img/interplanetary-album.svg"/></div>
+
 ## 3. Setting up the environment
 
 There are a few technical requirements before we start. Please install the following:
