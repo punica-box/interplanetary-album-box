@@ -394,8 +394,6 @@ In our tutorial project, you should paste a private key string into the input bo
 
 **NOTE**: The length of your hexadecimal private key should be 64. if you input an error private key, you will get a notify.
 
-![invalidPrivateKe](img/invalidPrivateKey.png)
-
 In our tutorial project, you **must** input a label for your account, which is a basic way to help your identify different accounts.
 
 ![importAccount2](img/importAccount2.png)
@@ -411,6 +409,12 @@ In our tutorial project, if you import account by private key successfully, you 
 Now, you can get your new account's base58 encode address in the following box.
 
 ![importAccount5](img/importAccount5.png)
+
+![importAccount6](img/importAccount6.png)
+
+![importAccount7](img/importAccount7.png)
+
+![importAccount8](img/importAccount8.png)
 
 - **Remove Account**
 
