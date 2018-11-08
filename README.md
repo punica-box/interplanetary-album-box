@@ -298,6 +298,10 @@ They also can share photos with anyone they wanted by sharing an IPFS address, w
 
 ### 5.3. Upload your Photos
 
+When we first use this dApp, the interface seems boring. Don't worry, an beautiful decentralized album is waiting for us.
+
+![uploadImg0](img/uploadImg0.png)
+
 ![uploadImg1](img/uploadImg1.png)
 
 ![uploadImg2](img/uploadImg2.png)
@@ -307,6 +311,10 @@ They also can share photos with anyone they wanted by sharing an IPFS address, w
 ![uploadImg4](img/uploadImg4.png)
 
 ![uploadImg5](img/uploadImg5.png)
+
+![uploadImg6](img/uploadImg6.png)
+
+![uploadImg7](img/uploadImg7.png)
 
 ### 5.4. dApp Settings
 
