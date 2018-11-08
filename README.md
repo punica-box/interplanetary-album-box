@@ -286,7 +286,15 @@ Only when we unlock our identity's account, can we get the encrypted IPFS hash a
 
 ### 5.2. Enjoy your Photos
 
+In interplanetary-album, we provide two way for user to view their photos.
+
 ![cardAlbum](img/cardAlbum.png)
+
+![collaspseAlbum](img/collaspseAlbum.png)
+
+They also can share photos with anyone they wanted by sharing an IPFS address, which can get by clicking the second button in each photos.
+
+![sharePhoto](img/sharePhoto.png)
 
 ### 5.3. Upload your Photos
 
