@@ -109,3 +109,7 @@ venv.bak/
 
 # test img file
 test/test_img
+
+# static img
+src/static/album/
+src/static/assets/
