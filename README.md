@@ -5,8 +5,11 @@ Welcome to Interplanetary Album, a decentralized Album is waiting for your.
 <!-- TOC -->
 
 - [1. Introduction](#1-introduction)
-    - [1.1. How IPFS Works](#11-how-ipfs-works)
-    - [1.2. IPFS HTTP API](#12-ipfs-http-api)
+    - [1.1. Elliptic Curve Integrated Encryption Scheme(ECIES)](#11-elliptic-curve-integrated-encryption-schemeecies)
+    - [1.2. Ontology Distributed Identity Framework(ONTID)](#12-ontology-distributed-identity-frameworkontid)
+    - [1.3. IPFS](#13-ipfs)
+        - [1.3.1. How IPFS Works](#131-how-ipfs-works)
+        - [1.3.2. IPFS HTTP API](#132-ipfs-http-api)
 - [2. Architecture](#2-architecture)
 - [3. Setting up the environment](#3-setting-up-the-environment)
 - [4. Getting started](#4-getting-started)
@@ -25,7 +28,19 @@ Welcome to Interplanetary Album, a decentralized Album is waiting for your.
 
 ## 1. Introduction
 
-### 1.1. How IPFS Works
+### 1.1. Elliptic Curve Integrated Encryption Scheme(ECIES)
+
+Elliptic Curve Integrated Encryption Scheme(also ECIES), is a hybrid encryption system proposed by Victor Shoup in 2001. Shoup's submission can be found at [here](https://www.shoup.net/papers/iso-2_1.pdf).
+
+### 1.2. Ontology Distributed Identity Framework(ONTID)
+
+Ontology DID (also called ONT ID) is a decentralized identity identification protocol based on W3C DID specifications. ONT ID establishes a cryptographically-based digital identity for each entity, allowing self-sovereign of data authorization and ownership confirmation, which makes the identity and data truly assets that the user can control.
+
+If you are interested in ONTID, you can find a detailed introduction [here](https://ontio.github.io/documentation/ontology_DID_en.html).
+
+### 1.3. IPFS
+
+#### 1.3.1. How IPFS Works
 
 You may be interested about what's the IPFS and how it works.
 
@@ -37,7 +52,7 @@ You may be interested about what's the IPFS and how it works.
 - When looking up files, you're asking the network to find nodes storing the content behind a unique hash.
 - Every file can be found by human-readable names using a decentralized naming system called IPNS.
 
-### 1.2. IPFS HTTP API
+#### 1.3.2. IPFS HTTP API
 
 When an IPFS node is running as a daemon, it exposes an HTTP API that allows you to control the node and run the same commands you can from the command line.
 
