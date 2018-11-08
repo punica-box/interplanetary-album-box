@@ -144,7 +144,7 @@ The hash after `peer identity` is your node’s ID and will be different from th
 
 ### 4.5. Create your Private IPFS Network (optional)
 
-The IPFS bootstrap list is a list of peers with which the IPFS daemon learns about other peers on the network. IPFS comes with a default list of trusted peers, but you are free to modify the list to suit your needs. One popular use for a custom bootstrap list is to create a personal IPFS network. You can get you IPFS bootstrap list by `bootstrap` command. 
+The IPFS bootstrap list is a list of peers with which the IPFS daemon learns about other peers on the network. IPFS comes with a default list of trusted peers, but you are free to modify the list to suit your needs. One popular use for a custom bootstrap list is to create a personal IPFS network. You can get you IPFS bootstrap list by `bootstrap` command.
 
 ```shell
 PS C:\Users> ipfs bootstrap
@@ -162,6 +162,8 @@ PS C:\Users> ipfs bootstrap
 /ip6/2604:a880:800:10::4a:5001/tcp/4001/ipfs/QmSoLV4Bbm51jM9C4gDYZQ9Cy3U6aXMJDAbzgu2fzaDs64
 /ip6/2a03:b0c0:0:1010::23:1001/tcp/4001/ipfs/QmSoLer265NRgSp2LA3dPaeykiS1J6DifTC88f5uVQKNAd
 ```
+
+**Note**: You **must** understand the risks of adding or removing nodes form IPFS node's bootstrap list, before you do it.
 
 Therefore, If you want to create your own IPFS network, you need to remove the default list of trusted peers, and add the peers that you trusted.
 
@@ -182,7 +184,19 @@ removed /ip6/2604:a880:800:10::4a:5001/tcp/4001/ipfs/QmSoLV4Bbm51jM9C4gDYZQ9Cy3U
 removed /ip6/2a03:b0c0:0:1010::23:1001/tcp/4001/ipfs/QmSoLer265NRgSp2LA3dPaeykiS1J6DifTC88f5uVQKNAd
 ```
 
-**Note**: You **must** understand the risks of adding or removing nodes form IPFS node's bootstrap list, before you do it.
+**Tips**: With an empty list, we can restore the default bootstrap list.
+
+```shell
+ipfs bootstrap add --default
+```
+
+To be extra cautious, You can also set the `LIBP2P_FORCE_PNET` environment variable to 1 to force the usage of private networks. If no private network is configured, the daemon will fail to start.
+
+```shell
+user@ubuntu:~$ export LIBP2P_FORCE_PNET=1
+user@ubuntu:~$ echo $LIBP2P_FORCE_PNET
+1
+```
 
 ### 4.6. Run your IPFS Node
 
