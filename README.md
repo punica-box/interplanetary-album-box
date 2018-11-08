@@ -107,7 +107,7 @@ Download the interplanetary-album box.
 punica unbox interplanetary-album
 ```
 
-Create virtual environments(optional).
+Create virtual environments (optional).
 
 ```shell
 virtualenv --no-site-packages venv
