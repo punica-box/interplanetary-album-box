@@ -16,14 +16,14 @@ Welcome to Interplanetary Album, a decentralized Album is waiting for your.
     - [4.1. what's the Punica Suite](#41-whats-the-punica-suite)
     - [4.2. what's the Punica Box](#42-whats-the-punica-box)
     - [4.3. Unboxing the dApp](#43-unboxing-the-dapp)
-- [5. Initialize your IPFS Repository](#5-initialize-your-ipfs-repository)
-    - [Run IPFS Node](#run-ipfs-node)
-- [6. Run your dApp](#6-run-your-dapp)
-- [7. Use your dApp](#7-use-your-dapp)
-    - [7.1. Unlock your Identity](#71-unlock-your-identity)
-    - [7.2. Enjoy your Photos](#72-enjoy-your-photos)
-    - [7.3. Upload your Photos](#73-upload-your-photos)
-    - [7.4. dApp Settings](#74-dapp-settings)
+    - [4.4. Initialize your IPFS Repository](#44-initialize-your-ipfs-repository)
+    - [4.5. Run your IPFS Node](#45-run-your-ipfs-node)
+    - [4.6. Run your dApp](#46-run-your-dapp)
+- [5. Use your dApp](#5-use-your-dapp)
+    - [5.1. Unlock your Identity](#51-unlock-your-identity)
+    - [5.2. Enjoy your Photos](#52-enjoy-your-photos)
+    - [5.3. Upload your Photos](#53-upload-your-photos)
+    - [5.4. dApp Settings](#54-dapp-settings)
 
 <!-- /TOC -->
 
@@ -125,7 +125,7 @@ Install the necessary dependencies.
 pip install -r requirements.txt
 ```
 
-## 5. Initialize your IPFS Repository
+### 4.4. Initialize your IPFS Repository
 
 `IPFS` stores all its settings and internal data in a directory called the repository. Before using IPFS for the first time, you’ll need to initialize the repository with the ipfs init command:
 
@@ -141,7 +141,7 @@ to get started, enter:
 
 The hash after `peer identity` is your node’s ID and will be different from the one shown in the above output. Other nodes on the network use it to find and connect to you. You can run ipfs id at any time to get it again if you need it.
 
-### Run IPFS Node
+### 4.5. Run your IPFS Node
 
 Before we run our dApp, we need to run our IPFS node as a daemon.
 
@@ -180,7 +180,7 @@ Gateway (readonly) server listening on /ip4/127.0.0.1/tcp/8080
 Daemon is ready
 ```
 
-## 6. Run your dApp
+### 4.6. Run your dApp
 
 At this point, you can run the dApp in your browser:
 
@@ -194,19 +194,19 @@ python interplanetary_album.py
 
 ![login](img/login.png)
 
-## 7. Use your dApp
+## 5. Use your dApp
 
-### 7.1. Unlock your Identity
+### 5.1. Unlock your Identity
 
 In our interplanetary-album, all pictures's IPFS address are bind with [Ontology digital identification](https://ontio.github.io/documentation/ontology_DID_en.html)（also `ONT ID`), which is a decentralized identification protocol which based on W3C DID specifications, and encrypted by it's public key in elliptic curve integrated encryption scheme(also ECIES). That is to say, only the picture owner and the user he shared with can visit his picture in the IPFS Network.
 
 ![loginSuccessful](img/loginSuccessful.png)
 
-### 7.2. Enjoy your Photos
+### 5.2. Enjoy your Photos
 
 ![cardAlbum](img/cardAlbum.png)
 
-### 7.3. Upload your Photos
+### 5.3. Upload your Photos
 
 ![uploadImg1](img/uploadImg1.png)
 
@@ -218,6 +218,6 @@ In our interplanetary-album, all pictures's IPFS address are bind with [Ontology
 
 ![uploadImg5](img/uploadImg5.png)
 
-### 7.4. dApp Settings
+### 5.4. dApp Settings
 
 ![dAppSettings](img/dAppSettings.png)
