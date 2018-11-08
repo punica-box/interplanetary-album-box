@@ -278,9 +278,11 @@ python interplanetary_album.py
 
 ### 5.1. Unlock your Identity
 
-In our interplanetary-album, all pictures's IPFS address are bind with [Ontology digital identification](https://ontio.github.io/documentation/ontology_DID_en.html)（also `ONT ID`), which is a decentralized identification protocol which based on W3C DID specifications, and encrypted by it's public key in elliptic curve integrated encryption scheme(also ECIES). That is to say, only the picture owner and the user he shared with can visit his picture in the IPFS Network.
+In interplanetary-album project, all pictures's IPFS address are bind with `ONT ID` and encrypted by it's public key in elliptic curve integrated encryption scheme(also ECIES). That is to say, only the picture owner and the user he shared with can visit his picture in the IPFS Network.
 
 ![loginSuccessful](img/loginSuccessful.png)
+
+Only when we unlock our identity's account, can we get the encrypted IPFS hash address from smart contract which is ensured by Ontology blochchain.
 
 ### 5.2. Enjoy your Photos
 
