@@ -20,7 +20,7 @@ from ontology.wallet.wallet_manager import WalletManager
 
 from src.crypto.ecies import ECIES
 
-ipfs_daemon = subprocess.Popen("ipfs daemon", stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+# ipfs_daemon = subprocess.Popen("ipfs daemon", stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
 static_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 template_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask('IPAblum', static_folder=static_folder, template_folder=template_folder)
@@ -36,7 +36,6 @@ try:
 except ipfsapi.exceptions.ConnectionError:
     print('Failed to establish a new connection to IPFS node...')
     exit(1)
-album = list()
 
 
 def remove_file_if_exists(path):
@@ -92,12 +91,12 @@ def get_item_list_from_contract(identity_acct: Account) -> list:
         return album_list
 
 
-def add_assets_to_ipfs(img_path: str, identity_acct: Account, payer_acct: Account):
+def add_assets_to_ipfs(img_path: str, identity_acct: Account, payer_acct: Account) -> str:
     file_folder, filename = os.path.split(img_path)
     if ('.jpg' or '.bmp' or '.jpeg' or '.png') in filename:
         result = ipfs.add(os.path.join(app.config['ASSETS_FOLDER'], img_path))
         filename, ext = os.path.splitext(filename)
-        put_one_item_to_contract(identity_acct, result['Hash'], ext, payer_acct)
+        return put_one_item_to_contract(identity_acct, result['Hash'], ext, payer_acct)
 
 
 def create_thumbnail(img_path):
@@ -242,13 +241,12 @@ def upload_file():
     if not isinstance(default_wallet_account, Account):
         return json.jsonify({'result': 'default account is locked'}), 501
     if file and allowed_file(file.filename):
-        print('file: ', file)
         filename = secure_filename(file.filename)
         img_path = os.path.join(app.config['ASSETS_FOLDER'], filename)
         file.save(img_path)
-        add_assets_to_ipfs(img_path, default_identity_account, default_wallet_account)
+        tx_hash = add_assets_to_ipfs(img_path, default_identity_account, default_wallet_account)
         remove_file_if_exists(img_path)
-        return json.jsonify({'result': filename}), 200
+        return json.jsonify({'result': filename, 'tx_hash': tx_hash}), 200
     else:
         return json.jsonify({'result': 'file is not allowed'}), 502
 
