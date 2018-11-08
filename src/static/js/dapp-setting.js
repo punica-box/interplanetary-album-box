@@ -65,9 +65,10 @@ let getDefaultIdentityData = async function () {
 };
 
 let changeContract = async function () {
-    let hex_contract_address = await this.$prompt('Paste your oep4 contract address here:', 'Change Contract', {
+    let hex_contract_address = await this.$prompt('Paste your contract address here:', 'Change Contract', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
+        closeOnClickModal: false,
         inputPattern: /^[a-zA-Z0-9]{40}$/,
         inputErrorMessage: 'Cannot handle invalid contract address'
     }).catch(() => {
@@ -105,6 +106,7 @@ let importAccount = async function () {
     let hex_private_key = await this.$prompt('Paste your private key string here:', 'Import Account', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
+        closeOnClickModal: false,
         inputPattern: /^[a-zA-Z0-9]{64}$/,
         inputErrorMessage: 'Cannot import invalid private key'
     }).catch(() => {
@@ -115,6 +117,7 @@ let importAccount = async function () {
     }
     let label = await this.$prompt('Account Label:', 'Import Account', {
         confirmButtonText: 'OK',
+        closeOnClickModal: false,
         cancelButtonText: 'Cancel',
     }).catch(() => {
         this.$message.warning('Import canceled');
@@ -125,6 +128,7 @@ let importAccount = async function () {
     let password = await this.$prompt('Account Password', 'Import Account', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
+        closeOnClickModal: false,
         inputType: 'password',
     }).catch(() => {
         this.$message.warning('Import canceled');
@@ -160,6 +164,7 @@ let createAccount = async function () {
     let label = await this.$prompt('Account Label:', 'Create Account', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
+        closeOnClickModal: false,
         inputPattern: /\S{1,}/,
         inputErrorMessage: 'invalid label'
     }).catch(() => {
@@ -171,6 +176,7 @@ let createAccount = async function () {
     let password = await this.$prompt('Account Password', 'Create Account', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
+        closeOnClickModal: false,
         inputPattern: /\S{1,}/,
         inputType: 'password',
         inputErrorMessage: 'invalid password'
@@ -200,6 +206,7 @@ let removeAccount = async function () {
         password = await this.$prompt('Account Password', 'Remove Default Account', {
             confirmButtonText: 'OK',
             cancelButtonText: 'Cancel',
+            closeOnClickModal: false,
             inputPattern: /\S{1,}/,
             inputType: 'password',
             inputErrorMessage: 'invalid password'
@@ -250,6 +257,7 @@ let accountChange = async function (value) {
         password = await this.$prompt('Account Password', 'Change Default Account', {
             confirmButtonText: 'OK',
             cancelButtonText: 'Cancel',
+            closeOnClickModal: false,
             inputPattern: /\S{1,}/,
             inputType: 'password',
             inputErrorMessage: 'invalid password'
@@ -309,6 +317,7 @@ let createIdentity = async function () {
     let label = await this.$prompt('Identity Label:', 'Create Identity', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
+        closeOnClickModal: false,
         inputPattern: /\S{1,}/,
         inputErrorMessage: 'invalid label'
     }).catch(() => {
@@ -320,6 +329,7 @@ let createIdentity = async function () {
     let password = await this.$prompt('Identity Password', 'Create Account', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
+        closeOnClickModal: false,
         inputPattern: /\S{1,}/,
         inputType: 'password',
         inputErrorMessage: 'invalid password'
@@ -351,6 +361,7 @@ let importIdentity = async function () {
     let hex_private_key = await this.$prompt('Paste your private key string here:', 'Import Identity', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
+        closeOnClickModal: false,
         inputPattern: /^[a-zA-Z0-9]{64}$/,
         inputErrorMessage: 'Cannot import invalid private key'
     }).catch(() => {
@@ -359,12 +370,15 @@ let importIdentity = async function () {
     if (hex_private_key === undefined) {
         return;
     }
-    let label = await this.$prompt('Identity Label:', 'Import Identity', {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-    }).catch(() => {
+    try {
+        let label = await this.$prompt('Identity Label:', 'Import Identity', {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            closeOnClickModal: false,
+        });
+    } catch (error) {
         this.$message.warning('Import canceled');
-    });
+    }
     if (label === undefined) {
         return;
     }
@@ -407,6 +421,7 @@ let removeIdentity = async function () {
         password = await this.$prompt('Identity Password', 'Remove Default Identity', {
             confirmButtonText: 'OK',
             cancelButtonText: 'Cancel',
+            closeOnClickModal: false,
             inputPattern: /\S{1,}/,
             inputType: 'password',
             inputErrorMessage: 'invalid password'
@@ -454,6 +469,7 @@ let identityChange = async function (value) {
         password = await this.$prompt('Identity Password', 'Change Default Identity', {
             confirmButtonText: 'OK',
             cancelButtonText: 'Cancel',
+            closeOnClickModal: false,
             inputPattern: /\S{1,}/,
             inputType: 'password',
             inputErrorMessage: 'invalid password'

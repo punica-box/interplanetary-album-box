@@ -52,6 +52,7 @@ new Vue({
             let label = await this.$prompt('Identity Label:', 'Create Identity', {
                 confirmButtonText: 'OK',
                 cancelButtonText: 'Cancel',
+                closeOnClickModal: false,
                 inputPattern: /\S{1,}/,
                 inputErrorMessage: 'invalid label'
             }).catch(() => {
@@ -63,6 +64,7 @@ new Vue({
             let password = await this.$prompt('Identity Password', 'Create Account', {
                 confirmButtonText: 'OK',
                 cancelButtonText: 'Cancel',
+                closeOnClickModal: false,
                 inputPattern: /\S{1,}/,
                 inputType: 'password',
                 inputErrorMessage: 'invalid password'
