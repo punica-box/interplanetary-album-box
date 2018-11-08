@@ -209,7 +209,7 @@ go get -u github.com/Kubuxu/go-ipfs-swarm-key-gen/ipfs-swarm-key-gen
 After install this utility successful, you can run it in one of your node like this:
 
 ```shell
-ipfs-swarm-key-gen > ~/.ipfs1/swarm.key
+ipfs-swarm-key-gen > ~/.ipfs/swarm.key
 ```
 
 Then, you need to do copy the file generated to the IPFS directory of each node.
