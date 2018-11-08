@@ -3,7 +3,7 @@
 
 from boa.builtins import concat
 from boa.interop.System.Runtime import CheckWitness, Serialize, Deserialize
-from boa.interop.System.Storage import Put, GetContext, Get
+from boa.interop.System.Storage import GetContext, Put, Get, Delete
 from boa.interop.System.Action import RegisterAction
 
 ctx = GetContext()
@@ -18,11 +18,13 @@ itemRemoveFail = RegisterAction('RemoveFail', 'ipfs_hash')
 
 def main(operation, args):
     if operation == 'put_one_item':
-        return put_one_item(args[0], args[1], args[2])
+        return put_one_item(args[0], args[1], args[2], args[3], args[4])
     elif operation == 'get_item_list':
         return get_item_list(args[0])
     elif operation == 'del_ont_item':
         return del_ont_item(args[0], args[1])
+    elif operation == 'clear_item_list':
+        return clear_item_list(args[0])
     else:
         return False
 
@@ -38,7 +40,7 @@ def is_item_exist(item_list, ipfs_hash):
     return False
 
 
-def put_one_item(ont_id, ipfs_hash, ext):
+def put_one_item(ont_id, encrypted_ipfs_hash, ext, aes_iv, encode_g_tilde):
     if not CheckWitness(ont_id):
         return False
     item_key = concat_key(ITEM_PREFIX, ont_id)
@@ -46,14 +48,14 @@ def put_one_item(ont_id, ipfs_hash, ext):
     item_list = []
     if item_list_info:
         item_list = Deserialize(item_list_info)
-    if is_item_exist(item_list, ipfs_hash):
-        itemPutFail(ipfs_hash)
+    if is_item_exist(item_list, encrypted_ipfs_hash):
+        itemPutFail(encrypted_ipfs_hash)
         return False
-    item = [ipfs_hash, ext]
+    item = [encrypted_ipfs_hash, ext, aes_iv, encode_g_tilde]
     item_list.append(item)
     item_list_info = Serialize(item_list)
     Put(ctx, item_key, item_list_info)
-    itemPut(ipfs_hash)
+    itemPut(encrypted_ipfs_hash)
     return True
 
 
@@ -81,3 +83,14 @@ def del_ont_item(ont_id, ipfs_hash):
             return True
     itemRemoveFail(ipfs_hash)
     return True
+
+
+def clear_item_list(ont_id):
+    if not CheckWitness(ont_id):
+        return False
+    item_key = concat_key(ITEM_PREFIX, ont_id)
+    item_list_info = Get(ctx, item_key)
+    if item_list_info:
+        Delete(ctx, item_key)
+        return True
+    return False
