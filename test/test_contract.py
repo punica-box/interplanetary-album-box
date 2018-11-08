@@ -10,6 +10,8 @@ from ontology.ont_sdk import OntologySdk
 from ontology.wallet.wallet_manager import WalletManager
 from ontology.smart_contract.neo_contract.abi.abi_info import AbiInfo
 
+from src.crypto.ecies import ECIES
+
 ontology = OntologySdk()
 remote_rpc_address = 'http://polaris3.ont.io:20336'
 contract_address_hex = 'cf25ea1932ddbc9a03ce62131001d8bcdccc12ea'
@@ -37,10 +39,15 @@ ont_id_acct = wallet_manager.get_account('did:ont:AHBB3LQNpqXjCLathy7vTNgmQ1cGSj
 
 class TestSmartContract(unittest.TestCase):
     def test_put_one_item(self):
-        ipfs_address = 'QmaxL3ixbfG1mwQeKRdBPnYxqiESv5nkKg5UoppdvtZPfn'
+        ipfs_address = 'QmVwRs3tMPwi8vHqZXfxdgbcJXdmrgViGiy77o9ohef6ss'
         ext = '.jpg'
         put_one_item_func = abi_info.get_function('put_one_item')
-        put_one_item_func.set_params_value((ont_id_acct.get_address().to_array(), ipfs_address, ext))
+
+        ipfs_address_bytes = ipfs_address.encode('ascii')
+        aes_iv, encode_g_tilde, encrypted_ipfs_address = ECIES.encrypt_with_ont_id_in_cbc(ipfs_address_bytes,
+                                                                                          ont_id_acct)
+        ont_id_acct_bytes = ont_id_acct.get_address().to_array()
+        put_one_item_func.set_params_value((ont_id_acct_bytes, encrypted_ipfs_address, ext, aes_iv, encode_g_tilde))
         tx_hash = ontology.neo_vm().send_transaction(contract_address_bytearray, ont_id_acct, acct, gas_limit,
                                                      gas_price, put_one_item_func, False)
         print(tx_hash)
