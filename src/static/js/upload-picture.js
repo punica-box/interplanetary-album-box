@@ -53,12 +53,9 @@ let submitUpload = async function () {
 };
 
 let handleUploadSuccess = async function (response, file, fileList) {
-    this.notify({
-        title: response.result.concat(' upload successful!'),
-        message: response.tx_hash,
-        type: 'success',
-        showClose: true
-
+    this.$message({
+        message: response.result.concat(' upload successful! ').concat('TxHash: '.concat(response.tx_hash)),
+        type: 'success'
     });
 };
 
