@@ -344,7 +344,7 @@ In our tutorial project, you **must** input a label for your account, which is a
 
 Therefore, if you not input a correct label, you will receive the following message.
 
-![createAccount5](img/createAccount5.png)
+![createAccount7](img/createAccount7.png)
 
 In our tutorial project, you **must** set a password for your account. This password will used to encrypt and decrypt your account's private key, which is an basic way to protect account's security.
 
@@ -352,7 +352,7 @@ In our tutorial project, you **must** set a password for your account. This pass
 
 Therefore, if you not input a correct password, you will receive the following message.
 
-![createAccount6](img/createAccount6.png)
+![createAccount8](img/createAccount8.png)
 
 If everything goes smoothly, your will get a hexadecimal private key in message box like the following.
 
@@ -361,6 +361,10 @@ If everything goes smoothly, your will get a hexadecimal private key in message 
 Now, you can switch to your new accout.
 
 ![createAccount4](img/createAccount4.png)
+
+![createAccount5](img/createAccount5.png)
+
+![createAccount6](img/createAccount6.png)
 
 - **Import Account**
 
