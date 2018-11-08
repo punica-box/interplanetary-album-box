@@ -64,7 +64,7 @@ class TestSmartContract(unittest.TestCase):
         clear_item_list_func.set_params_value((ont_id_acct.get_address().to_array(),))
         tx_hash = ontology.neo_vm().send_transaction(contract_address_bytearray, ont_id_acct, acct, gas_limit,
                                                      gas_price, clear_item_list_func, False)
-        self.assertEqual(64, tx_hash)
+        self.assertEqual(64, len(tx_hash))
 
 
 if __name__ == '__main__':
