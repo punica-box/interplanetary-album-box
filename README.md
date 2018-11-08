@@ -198,6 +198,29 @@ user@ubuntu:~$ echo $LIBP2P_FORCE_PNET
 1
 ```
 
+To create a private network, we also need to create a `swarm.key` file to enable private network feature of IPFS. We will start by adding a key called the `swarm.key` that tells the IPFS nodes that they will be a part of a private network which all will share this `swarm.key` file.
+
+If you have Go environment, you can run the following command to install the `swarm.key` generation utility:
+
+```shell
+go get -u github.com/Kubuxu/go-ipfs-swarm-key-gen/ipfs-swarm-key-gen
+```
+
+After install this utility successful, you can run it in one of your node like this:
+
+```shell
+ipfs-swarm-key-gen > ~/.ipfs1/swarm.key
+```
+
+Then, you need to do copy the file generated to the IPFS directory of each node.
+
+Now, you can add your new bootstrap node to build your private network. For example:
+
+```shell
+PS C:\Users> ipfs bootstrap add /ip4/192.168.181.141/tcp/4001/ipfs/QmYzdL2Pe3JvoqMZ1qvcVMnAWo4fVqyvw2S8XDnxHLK8MV
+added /ip4/192.168.181.141/tcp/4001/ipfs/QmYzdL2Pe3JvoqMZ1qvcVMnAWo4fVqyvw2S8XDnxHLK8MV
+```
+
 ### 4.6. Run your IPFS Node
 
 Before we run our dApp, we need to run our IPFS node as a daemon.
