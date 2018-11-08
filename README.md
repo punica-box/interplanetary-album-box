@@ -5,9 +5,9 @@ Welcome to Interplanetary Album, a decentralized Album is waiting for your.
 <!-- TOC -->
 
 - [1. Introduction](#1-introduction)
-    - [1.1. Elliptic Curve Integrated Encryption Scheme(ECIES)](#11-elliptic-curve-integrated-encryption-schemeecies)
-    - [1.2. Ontology Distributed Identity Framework(ONTID)](#12-ontology-distributed-identity-frameworkontid)
-    - [1.3. IPFS](#13-ipfs)
+    - [1.1. Elliptic Curve Integrated Encryption Scheme (ECIES)](#11-elliptic-curve-integrated-encryption-scheme-ecies)
+    - [1.2. Ontology Distributed Identity Framework (ONTID)](#12-ontology-distributed-identity-framework-ontid)
+    - [1.3. InterPlanetary File System (IPFS)](#13-interplanetary-file-system-ipfs)
         - [1.3.1. How IPFS Works](#131-how-ipfs-works)
         - [1.3.2. IPFS HTTP API](#132-ipfs-http-api)
 - [2. Architecture](#2-architecture)
@@ -17,6 +17,7 @@ Welcome to Interplanetary Album, a decentralized Album is waiting for your.
     - [4.2. what's the Punica Box](#42-whats-the-punica-box)
     - [4.3. Unboxing the dApp](#43-unboxing-the-dapp)
 - [5. Initialize your IPFS Repository](#5-initialize-your-ipfs-repository)
+    - [Run IPFS Node](#run-ipfs-node)
 - [6. Run your dApp](#6-run-your-dapp)
 - [7. Use your dApp](#7-use-your-dapp)
     - [7.1. Unlock your Identity](#71-unlock-your-identity)
@@ -28,23 +29,23 @@ Welcome to Interplanetary Album, a decentralized Album is waiting for your.
 
 ## 1. Introduction
 
-### 1.1. Elliptic Curve Integrated Encryption Scheme(ECIES)
+### 1.1. Elliptic Curve Integrated Encryption Scheme (ECIES)
 
 Elliptic Curve Integrated Encryption Scheme(also ECIES), is a hybrid encryption system proposed by Victor Shoup in 2001. Shoup's submission can be found at [here](https://www.shoup.net/papers/iso-2_1.pdf).
 
-### 1.2. Ontology Distributed Identity Framework(ONTID)
+### 1.2. Ontology Distributed Identity Framework (ONTID)
 
 Ontology DID (also called ONT ID) is a decentralized identity identification protocol based on W3C DID specifications. ONT ID establishes a cryptographically-based digital identity for each entity, allowing self-sovereign of data authorization and ownership confirmation, which makes the identity and data truly assets that the user can control.
 
 If you are interested in ONTID, you can find a detailed introduction [here](https://ontio.github.io/documentation/ontology_DID_en.html).
 
-### 1.3. IPFS
+### 1.3. InterPlanetary File System (IPFS)
+
+InterPlanetary File System (IPFS) is a protocol and network designed to create a content-addressable, peer-to-peer method of storing and sharing hypermedia in a distributed file system.
 
 #### 1.3.1. How IPFS Works
 
-You may be interested about what's the IPFS and how it works.
-
- when we add files to IPFS:
+You may be interested about how IPFS works. In fact, when we add files to IPFS:
 
 - Each file and all of the blocks within it are given a unique fingerprint called a cryptographic hash.
 - IPFS removes duplications across the network.
@@ -139,6 +140,45 @@ to get started, enter:
 ```
 
 The hash after `peer identity` is your node’s ID and will be different from the one shown in the above output. Other nodes on the network use it to find and connect to you. You can run ipfs id at any time to get it again if you need it.
+
+### Run IPFS Node
+
+Before we run our dApp, we need to run our IPFS node as a daemon.
+
+```shell
+PS C:\Users> ipfs daemon
+```
+
+If your node run properly, you can see the following output.
+
+```shell
+Initializing daemon...
+Swarm is limited to private network of peers with the swarm key
+Swarm key fingerprint: e06fa4c6c256f4524bc3abb4a1515556
+Swarm listening on /ip4/127.0.0.1/tcp/4001
+Swarm listening on /ip4/169.254.120.205/tcp/4001
+Swarm listening on /ip4/169.254.28.251/tcp/4001
+Swarm listening on /ip4/169.254.77.95/tcp/4001
+Swarm listening on /ip4/192.168.182.1/tcp/4001
+Swarm listening on /ip4/192.168.50.211/tcp/4001
+Swarm listening on /ip4/192.168.56.1/tcp/4001
+Swarm listening on /ip4/192.168.99.1/tcp/4001
+Swarm listening on /ip6/::1/tcp/4001
+Swarm listening on /p2p-circuit/ipfs/QmauvPUxzGN32aBtHXGRGCbNPxkpCA5ZFc637ABFjGe2mF
+Swarm announcing /ip4/127.0.0.1/tcp/4001
+Swarm announcing /ip4/169.254.120.205/tcp/4001
+Swarm announcing /ip4/169.254.28.251/tcp/4001
+Swarm announcing /ip4/169.254.77.95/tcp/4001
+Swarm announcing /ip4/192.168.182.1/tcp/4001
+Swarm announcing /ip4/192.168.3.90/tcp/49660
+Swarm announcing /ip4/192.168.50.211/tcp/4001
+Swarm announcing /ip4/192.168.56.1/tcp/4001
+Swarm announcing /ip4/192.168.99.1/tcp/4001
+Swarm announcing /ip6/::1/tcp/4001
+API server listening on /ip4/127.0.0.1/tcp/5001
+Gateway (readonly) server listening on /ip4/127.0.0.1/tcp/8080
+Daemon is ready
+```
 
 ## 6. Run your dApp
 
