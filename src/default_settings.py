@@ -22,12 +22,12 @@ IPFS_PORT = 5001
 GAS_LIMIT = 20000000
 GAS_PRICE = 500
 ONT_RPC_ADDRESS = 'http://polaris3.ont.io:20336'
-CONTRACT_ADDRESS_HEX = '9026b8595d5c97a3ffb41d9c7aadaccfde82c40b'
+CONTRACT_ADDRESS_HEX = 'cf25ea1932ddbc9a03ce62131001d8bcdccc12ea'
 CONTRACT_ADDRESS_BYTEARRAY = bytearray(binascii.a2b_hex(CONTRACT_ADDRESS_HEX))
 CONTRACT_ADDRESS_BYTEARRAY.reverse()
 ONTOLOGY = OntologySdk()
 ONTOLOGY.rpc.set_address(ONT_RPC_ADDRESS)
-with open(os.path.join(CONTRACTS_FOLDER, 'interplanetary-album.json')) as f:
+with open(os.path.join(CONTRACTS_FOLDER, 'interplanetary-album.abi.json')) as f:
     CONTRACT_ABI = json.loads(f.read())
     entry_point = CONTRACT_ABI.get('entrypoint', '')
     functions = CONTRACT_ABI['abi']['functions']

@@ -18,6 +18,8 @@ from ontology.account.account import Account
 from ontology.exception.exception import SDKException
 from ontology.wallet.wallet_manager import WalletManager
 
+from src.crypto.ecies import ECIES
+
 ipfs_daemon = subprocess.Popen("ipfs daemon", stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
 static_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 template_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
@@ -58,7 +60,10 @@ def ensure_remove_dir_if_exists(path):
 
 def put_one_item_to_contract(ont_id_acct: Account, ipfs_address: str, ext: str, payer_acct: Account) -> str:
     put_one_item_func = app.config['ABI_INFO'].get_function('put_one_item')
-    put_one_item_func.set_params_value((ont_id_acct.get_address().to_array(), ipfs_address, ext))
+    ipfs_address_bytes = ipfs_address.encode('ascii')
+    aes_iv, encode_g_tilde, encrypted_ipfs_address = ECIES.encrypt_with_ont_id_in_cbc(ipfs_address_bytes, ont_id_acct)
+    ont_id_acct_bytes = ont_id_acct.get_address().to_array()
+    put_one_item_func.set_params_value((ont_id_acct_bytes, encrypted_ipfs_address, ext, aes_iv, encode_g_tilde))
     gas_limit = app.config['GAS_LIMIT']
     gas_price = app.config['GAS_PRICE']
     contract_address_bytearray = app.config['CONTRACT_ADDRESS_BYTEARRAY']
@@ -74,11 +79,17 @@ def get_item_list_from_contract(identity_acct: Account) -> list:
     item_list = app.config['ONTOLOGY'].neo_vm().send_transaction(contract_address_bytearray, None, None, 0, 0,
                                                                  get_item_list_func, True)
     if item_list is None or None in item_list:
-        item_list = list()
+        return list()
+    album_list = list()
     for index in range(len(item_list)):
-        item_list[index][0] = binascii.a2b_hex(item_list[index][0]).decode('ascii')
-        item_list[index][1] = binascii.a2b_hex(item_list[index][1]).decode('ascii')
-    return item_list
+        encrypted_ipfs_address_bytes = binascii.a2b_hex(item_list[index][0])
+        ext = binascii.a2b_hex(item_list[index][1]).decode('ascii')
+        aes_iv = binascii.a2b_hex(item_list[index][2])
+        encode_g_tilde = binascii.a2b_hex(item_list[index][3])
+        ipfs_address = ECIES.decrypt_with_ont_id_in_cbc(aes_iv, encode_g_tilde, encrypted_ipfs_address_bytes,
+                                                        identity_acct)
+        album_list.append([ipfs_address.decode('ascii'), ext])
+        return album_list
 
 
 def add_assets_to_ipfs(img_path: str, identity_acct: Account, payer_acct: Account):
@@ -353,7 +364,8 @@ def create_identity():
     password = request.json.get('password')
     hex_private_key = util.get_random_bytes(32).hex()
     try:
-        new_identity = app.config['WALLET_MANAGER'].create_identity_from_private_key(label, password, hex_private_key)
+        new_identity = app.config['WALLET_MANAGER'].create_identity_from_private_key(label, password,
+                                                                                     hex_private_key)
     except SDKException as e:
         return json.jsonify({'result': e}), 500
     app.config['WALLET_MANAGER'].save()
@@ -366,7 +378,8 @@ def import_identity():
     password = request.json.get('password')
     hex_private_key = request.json.get('hex_private_key')
     try:
-        new_identity = app.config['WALLET_MANAGER'].create_identity_from_private_key(label, password, hex_private_key)
+        new_identity = app.config['WALLET_MANAGER'].create_identity_from_private_key(label, password,
+                                                                                     hex_private_key)
     except SDKException as e:
         return json.jsonify({'result': e}), 500
     app.config['WALLET_MANAGER'].save()
