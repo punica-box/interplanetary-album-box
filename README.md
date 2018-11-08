@@ -184,7 +184,7 @@ removed /ip6/2604:a880:800:10::4a:5001/tcp/4001/ipfs/QmSoLV4Bbm51jM9C4gDYZQ9Cy3U
 removed /ip6/2a03:b0c0:0:1010::23:1001/tcp/4001/ipfs/QmSoLer265NRgSp2LA3dPaeykiS1J6DifTC88f5uVQKNAd
 ```
 
-**Tips**: With an empty list, we can restore the default bootstrap list.
+**Tips**: With an empty list, we can restore the default bootstrap list by `--default` option.
 
 ```shell
 ipfs bootstrap add --default
