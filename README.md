@@ -300,4 +300,108 @@ In our interplanetary-album, all pictures's IPFS address are bind with [Ontology
 
 ### 5.4. dApp Settings
 
-![dAppSettings](img/dAppSettings.png)
+When you select this tab, you can see the following interface:
+
+![Dapp Settings](img/dappSettings.png)
+
+- **Select Default Network**
+
+As a tutorial project, we provide an example about how to support different network in a dApp, such as main network, test network and local network.
+
+![selectNetwork1](img/selectNetwork1.png)
+
+In our tutorial project, if you connect to a new node successfully, you will receive the following message.
+
+![selectNetwork2](img/selectNetwork2.png)
+
+In our tutorial project, if you want to connect to a local node, please make sure you have run it in your computer before you connect, or you will receive the following message.
+
+![selectNetwork3](img/selectNetwork3.png)
+
+For more details, you can visit [Ontology](https://github.com/ontio/ontology).
+
+You can also connect your dApp to the solochain.
+
+![selectNetwork4](img/selectNetwork4.png)
+
+- **Select Default Account**
+
+As a tutorial project, we provide an example about how to support multi wallet account management in a dApp.
+
+![electDefaultAccount1](img/selectDefaultAccount1.png)
+
+In our tutorial project, when the dApp start, it will read the wallet file in your computer, then initialize the wallet account for you.
+
+![selectDefaultAccount2](img/selectDefaultAccount2.png)
+
+- **Create Account**
+
+As a tutorial project, we provide an example about how to create new account in a dApp.
+
+In our tutorial project, you **must** input a label for your account, which is a basic way to help your identify different accounts.
+
+![createAccount1](img/createAccount1.png)
+
+Therefore, if you not input a correct label, you will receive the following message.
+
+![createAccount5](img/createAccount5.png)
+
+In our tutorial project, you **must** set a password for your account. This password will used to encrypt and decrypt your account's private key, which is an basic way to protect account's security.
+
+![createAccount2](img/createAccount2.png)
+
+Therefore, if you not input a correct password, you will receive the following message.
+
+![createAccount6](img/createAccount6.png)
+
+If everything goes smoothly, your will get a hexadecimal private key in message box like the following.
+
+![createAccount3](img/createAccount3.png)
+
+Now, you can switch to your new accout.
+
+![createAccount4](img/createAccount4.png)
+
+- **Import Account**
+
+As a tutorial project, we provide an example about how to import a account into a dApp  based on hexadecimal private key.
+
+In our tutorial project, you should paste a private key string into the input box.
+
+![importAccount1](img/importAccount1.png)
+
+**NOTE**: The length of your hexadecimal private key should be 64. if you input an error private key, you will get a notify.
+
+![invalidPrivateKe](img/invalidPrivateKey.png)
+
+In our tutorial project, you **must** input a label for your account, which is a basic way to help your identify different accounts.
+
+![importAccount2](img/importAccount2.png)
+
+In our tutorial project, you **must** set a password for your account. This password will used to encrypt and decrypt your account's private key, which is an basic way to protect account's security.
+
+![importAccount3](img/importAccount3.png)
+
+In our tutorial project, if you import account by private key successfully, you can see your new account in drop-down menu.
+
+![importAccount4](img/importAccount4.png)
+
+Now, you can get your new account's base58 encode address in the following box.
+
+![importAccount5](img/importAccount5.png)
+
+- **Remove Account**
+
+As a tutorial project, we provide an example about how to remove a account from a dApp based on ontology-python-sdk.
+
+In our tutorial project, you should provide a password to provide you have permission to manage this account.
+
+![removeAccount1](img/removeAccount1.png)
+
+If everything goes smoothly, you will receive the following message.
+
+![removeAccount2](img/removeAccount2.png)
+
+Now, the account is removed from the `Default Accout` drop-down menu and also with the wallet file.
+
+![removeAccount3](img/removeAccount3.png)
