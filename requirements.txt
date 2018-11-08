@@ -1,3 +1,4 @@
+ecdsa
 Flask
 Pillow
 Flask-JSGlue
