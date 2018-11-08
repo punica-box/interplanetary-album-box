@@ -157,7 +157,7 @@ let importAccount = async function () {
 };
 
 let createAccount = async function () {
-    let label = await this.$prompt('Account Label:', 'Import Account', {
+    let label = await this.$prompt('Account Label:', 'Create Account', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
         inputPattern: /\S{1,}/,
@@ -168,7 +168,7 @@ let createAccount = async function () {
     if (label === undefined) {
         return;
     }
-    let password = await this.$prompt('Account Password', 'Import Account', {
+    let password = await this.$prompt('Account Password', 'Create Account', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
         inputPattern: /\S{1,}/,
@@ -242,6 +242,9 @@ let removeAccount = async function () {
 };
 
 let accountChange = async function (value) {
+    if (value[0] === this.settingForm.b58AddressSelected) {
+        return
+    }
     let password = '';
     try {
         password = await this.$prompt('Account Password', 'Change Default Account', {
@@ -443,6 +446,9 @@ let removeIdentity = async function () {
 };
 
 let identityChange = async function (value) {
+    if (value[0] === this.settingForm.ontIdSelected) {
+        return
+    }
     let password = '';
     try {
         password = await this.$prompt('Identity Password', 'Change Default Identity', {
