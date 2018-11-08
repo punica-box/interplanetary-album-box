@@ -212,7 +212,7 @@ After install this utility successful, you can run it in one of your node like t
 ipfs-swarm-key-gen > ~/.ipfs/swarm.key
 ```
 
-Then, you need to do copy the file generated to the IPFS directory of each node.
+Then, you need to copy the file generated to the IPFS directory of each node.
 
 Now, you can add your new bootstrap node to build your private network. For example:
 
