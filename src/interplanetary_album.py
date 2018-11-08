@@ -88,7 +88,7 @@ def get_item_list_from_contract(identity_acct: Account) -> list:
         ipfs_address = ECIES.decrypt_with_ont_id_in_cbc(aes_iv, encode_g_tilde, encrypted_ipfs_address_bytes,
                                                         identity_acct)
         album_list.append([ipfs_address.decode('ascii'), ext])
-        return album_list
+    return album_list
 
 
 def add_assets_to_ipfs(img_path: str, identity_acct: Account, payer_acct: Account) -> str:
@@ -336,12 +336,17 @@ def remove_account():
 def account_change():
     b58_address_selected = request.json.get('b58_address_selected')
     password = request.json.get('password')
+    global default_wallet_account
+    old_wallet_account = default_wallet_account
+    try:
+        default_wallet_account = app.config['WALLET_MANAGER'].get_account(b58_address_selected, password)
+    except SDKException:
+        default_wallet_account = old_wallet_account
+        return json.jsonify({'result': 'invalid password'}), 400
     try:
         app.config['WALLET_MANAGER'].get_wallet().set_default_account_by_address(b58_address_selected)
-        global default_wallet_account
-        default_wallet_account = app.config['WALLET_MANAGER'].get_account(b58_address_selected, password)
-    except SDKException as e:
-        return json.jsonify({'result': e.args[1]}), 400
+    except SDKException:
+        return json.jsonify({'result': 'invalid base58 address'})
     app.config['WALLET_MANAGER'].save()
     return json.jsonify({'result': 'Change successful'}), 200
 
@@ -403,12 +408,17 @@ def remove_identity():
 def identity_change():
     ont_id_selected = request.json.get('ont_id_selected')
     password = request.json.get('password')
+    global default_identity_account
+    old_identity_account = default_identity_account
     try:
-        app.config['WALLET_MANAGER'].get_wallet().set_default_identity_by_ont_id(ont_id_selected)
-        global default_identity_account
         default_identity_account = app.config['WALLET_MANAGER'].get_account(ont_id_selected, password)
     except SDKException:
-        return json.jsonify({'result': 'Invalid OntId'}), 400
+        default_identity_account = old_identity_account
+        return json.jsonify({'result': 'Invalid Password'}), 501
+    try:
+        app.config['WALLET_MANAGER'].get_wallet().set_default_identity_by_ont_id(ont_id_selected)
+    except SDKException:
+        return json.jsonify({'result': 'Invalid OntId'}), 500
     app.config['WALLET_MANAGER'].save()
     return json.jsonify({'result': 'Change Successful'}), 200
 
