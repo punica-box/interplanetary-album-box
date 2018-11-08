@@ -53,8 +53,13 @@ let submitUpload = async function () {
 };
 
 let handleUploadSuccess = async function (response, file, fileList) {
-    console.log(response);
-    console.log(file);
+    this.notify({
+        title: response.result.concat(' upload successful!'),
+        message: response.tx_hash,
+        type: 'success',
+        showClose: true
+
+    });
 };
 
 let handleUploadError = async function (err, file, fileList) {
@@ -63,5 +68,4 @@ let handleUploadError = async function (err, file, fileList) {
         type: 'error',
         showClose: true
     });
-    this.$refs.upload.submit();
 };
