@@ -9,6 +9,15 @@
     {{ JSGlue.include() }}
     <!-- import favicon -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <style>
+        .el-select .el-input {
+            width: 240px;
+        }
+
+        .input-with-select .el-input-group__prepend {
+            background-color: #fff;
+        }
+    </style>
 </head>
 <body>
 <div id="vue-app" style="width:1400px; margin:auto">
