@@ -80,8 +80,6 @@ Now, we have Punica CLI, Punica Box and Solo Chain in our Punica Suite. More pow
 
 ![ecosystem](img/ecosystem.png)
 
-![punicaSuite](img/punicaSuite.png)
-
 ### 4.2. what's the Punica Box
 
 In the past, when we wanted to begin developing on Ontology Blockchain, the first question we may ask is, "Where do I start?".
