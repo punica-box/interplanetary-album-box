@@ -2,8 +2,6 @@
 
 Welcome to Interplanetary Album, a decentralized Album is waiting for your.
 
-<!-- TOC -->
-
 - [1. Introduction](#1-introduction)
     - [1.1. Elliptic Curve Integrated Encryption Scheme (ECIES)](#11-elliptic-curve-integrated-encryption-scheme-ecies)
     - [1.2. Ontology Distributed Identity Framework (ONTID)](#12-ontology-distributed-identity-framework-ontid)
@@ -25,8 +23,6 @@ Welcome to Interplanetary Album, a decentralized Album is waiting for your.
     - [5.2. Enjoy your Photos](#52-enjoy-your-photos)
     - [5.3. Upload your Photos](#53-upload-your-photos)
     - [5.4. dApp Settings](#54-dapp-settings)
-
-<!-- /TOC -->
 
 ## 1. Introduction
 
@@ -82,17 +78,19 @@ Punica is a Ontology dApp Development Framework, which has (almost) everything y
 
 Now, we have Punica CLI, Punica Box and Solo Chain in our Punica Suite. More powerful dApp development tools is on the road.
 
+![ecosystem](img/ecosystem.png)
+
 ![punicaSuite](img/punicaSuite.png)
 
 ### 4.2. what's the Punica Box
 
 In the past, when we wanted to begin developing on Ontology Blockchain, the first question we may ask is, "Where do I start?".
 
-Now, we have a brief answer, “Start from Punica Box.
+Now, we have a brief answer, “Start from Punica Box.”
 
-Punica Box is an example Ontology application and/or boilerplate that puts complimentary tools and libraries into a single, easily-downloadable package. Every Punica Box comes with libraries and tools already preinstalled, code that uses those libraries and tools, external scripts (if necessary), as well as helpful README's and documentation. All Punica Boxes are directly integrated into the OBox command line, and you need only type `punica unbox <box name>` to download and prepare your box of choice.
+Punica Box is an example Ontology application and/or boilerplate that puts complimentary tools and libraries into a single, easily-downloadable package. Every Punica Box comes with libraries and tools already preinstalled, code that uses those libraries and tools, external scripts (if necessary), as well as helpful README's and documentation. All Punica Boxes are directly integrated into the Punica command line, and you need only type `punica unbox <box name>` to download and prepare your box of choice.
 
-Before we begin a wonderful journey, ensure you've installed the latest version of OBox before opening your first box.
+Before we begin a wonderful journey, ensure you've installed the latest version of Punica before opening your first box.
 
 ### 4.3. Unboxing the dApp
 
