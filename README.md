@@ -1,30 +1,26 @@
-# interplanetary-album-box
+# Interplanetary Album Box
 
-Welcome to Interplanetary Album, a decentralized Album is waiting for your.
+A box has all you need to get started with IPFS and ONT ID(Interplanetary Album) tutorial.
 
-- [1. Introduction](#1-introduction)
-    - [1.1. Elliptic Curve Integrated Encryption Scheme (ECIES)](#11-elliptic-curve-integrated-encryption-scheme-ecies)
-    - [1.2. Ontology Distributed Identity Framework (ONTID)](#12-ontology-distributed-identity-framework-ontid)
-    - [1.3. InterPlanetary File System (IPFS)](#13-interplanetary-file-system-ipfs)
-        - [1.3.1. How IPFS Works](#131-how-ipfs-works)
-        - [1.3.2. IPFS HTTP API](#132-ipfs-http-api)
-- [2. Architecture](#2-architecture)
-- [3. Setting up the environment](#3-setting-up-the-environment)
-- [4. Getting started](#4-getting-started)
-    - [4.1. what's the Punica Suite](#41-whats-the-punica-suite)
-    - [4.2. what's the Punica Box](#42-whats-the-punica-box)
-    - [4.3. Unboxing the dApp](#43-unboxing-the-dapp)
-    - [4.4. Initialize your IPFS Repository](#44-initialize-your-ipfs-repository)
-    - [4.5. Create your Private IPFS Network (optional)](#45-create-your-private-ipfs-network-optional)
-    - [4.6. Run your IPFS Node](#46-run-your-ipfs-node)
-    - [4.7. Run your dApp](#47-run-your-dapp)
-- [5. Use your dApp](#5-use-your-dapp)
-    - [5.1. Unlock your Identity](#51-unlock-your-identity)
-    - [5.2. Enjoy your Photos](#52-enjoy-your-photos)
-    - [5.3. Upload your Photos](#53-upload-your-photos)
-    - [5.4. dApp Settings](#54-dapp-settings)
+## Getting Started
 
-## 1. Introduction
+Install Punica.
+
+```bash
+pip3 install punica
+```
+
+Download the `interplanetary-album-box`.
+
+```bash
+punica unbox tutorial-token
+```
+
+## Documentation
+
+Read a beautiful, responsive guide documentation in [here](https://punica-box.gitbook.io/docs/interplanetary-album-box).
+
+<!-- ## 1. Introduction
 
 ### 1.1. Elliptic Curve Integrated Encryption Scheme (ECIES)
 
@@ -426,4 +422,4 @@ If everything goes smoothly, you will receive the following message.
 
 Now, the account is removed from the `Default Accout` drop-down menu and also with the wallet file.
 
-![removeAccount3](img/removeAccount3.png)
+![removeAccount3](img/removeAccount3.png) -->
