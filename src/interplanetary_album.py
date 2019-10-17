@@ -10,10 +10,13 @@ import subprocess
 import ipfsapi
 from flask_jsglue import JSGlue
 from PIL import Image, ImageFile
+from ontology.contract.neo.invoke_function import InvokeFunction
+from ontology.sdk import Ontology
+from ontology.utils import utils
+from ontology.wallet.account import AccountData
 from werkzeug.utils import secure_filename
 from flask import Flask, request, json, send_from_directory, render_template, redirect, url_for
 
-from ontology.utils import util
 from ontology.account.account import Account
 from ontology.exception.exception import SDKException
 from ontology.wallet.wallet_manager import WalletManager
@@ -33,7 +36,7 @@ default_wallet_account = None
 
 try:
     ipfs = ipfsapi.connect(app.config['IPFS_HOST'], app.config['IPFS_PORT'])
-except ipfsapi.exceptions.ConnectionError:
+except Exception:
     print('Failed to establish a new connection to IPFS node...')
     exit(1)
 
@@ -58,33 +61,37 @@ def ensure_remove_dir_if_exists(path):
 
 
 def put_one_item_to_contract(ont_id_acct: Account, ipfs_address: str, ext: str, payer_acct: Account) -> str:
-    put_one_item_func = app.config['ABI_INFO'].get_function('put_one_item')
+    put_one_item_func = InvokeFunction('put_one_item')
     ipfs_address_bytes = ipfs_address.encode('ascii')
     aes_iv, encode_g_tilde, encrypted_ipfs_address = ECIES.encrypt_with_ont_id_in_cbc(ipfs_address_bytes, ont_id_acct)
-    ont_id_acct_bytes = ont_id_acct.get_address().to_array()
-    put_one_item_func.set_params_value((ont_id_acct_bytes, encrypted_ipfs_address, ext, aes_iv, encode_g_tilde))
+    ont_id_acct_bytes = ont_id_acct.get_address().to_bytes()
+    put_one_item_func.set_params_value(ont_id_acct_bytes, encrypted_ipfs_address, ext, aes_iv, encode_g_tilde)
     gas_limit = app.config['GAS_LIMIT']
     gas_price = app.config['GAS_PRICE']
     contract_address_bytearray = app.config['CONTRACT_ADDRESS_BYTEARRAY']
-    tx_hash = app.config['ONTOLOGY'].neo_vm().send_transaction(contract_address_bytearray, ont_id_acct, payer_acct,
-                                                               gas_limit, gas_price, put_one_item_func, False)
+    tx_hash = app.config['ONTOLOGY'].rpc.send_neo_vm_transaction(contract_address_bytearray, ont_id_acct, payer_acct,
+                                                                 gas_price, gas_limit, put_one_item_func)
     return tx_hash
 
 
 def get_item_list_from_contract(identity_acct: Account) -> list:
-    get_item_list_func = app.config['ABI_INFO'].get_function('get_item_list')
-    get_item_list_func.set_params_value((identity_acct.get_address().to_array(),))
+    get_item_list_func = InvokeFunction('get_item_list')
+    get_item_list_func.set_params_value(identity_acct.get_address())
     contract_address_bytearray = app.config['CONTRACT_ADDRESS_BYTEARRAY']
-    item_list = app.config['ONTOLOGY'].neo_vm().send_transaction(contract_address_bytearray, None, None, 0, 0,
-                                                                 get_item_list_func, True)
+    response = app.config['ONTOLOGY'].rpc.send_neo_vm_tx_pre_exec(contract_address_bytearray, get_item_list_func)
+    item_list = list()
+    if isinstance(response, dict):
+        item_list = response.get('Result')
+    if item_list is None:
+        item_list = list()
     if item_list is None or None in item_list:
         return list()
     album_list = list()
-    for index in range(len(item_list)):
-        encrypted_ipfs_address_bytes = binascii.a2b_hex(item_list[index][0])
-        ext = binascii.a2b_hex(item_list[index][1]).decode('ascii')
-        aes_iv = binascii.a2b_hex(item_list[index][2])
-        encode_g_tilde = binascii.a2b_hex(item_list[index][3])
+    for item in item_list:
+        encrypted_ipfs_address_bytes = binascii.a2b_hex(item[0])
+        ext = binascii.a2b_hex(item[1]).decode('ascii')
+        aes_iv = binascii.a2b_hex(item[2])
+        encode_g_tilde = binascii.a2b_hex(item[3])
         ipfs_address = ECIES.decrypt_with_ont_id_in_cbc(aes_iv, encode_g_tilde, encrypted_ipfs_address_bytes,
                                                         identity_acct)
         album_list.append([ipfs_address.decode('ascii'), ext])
@@ -93,8 +100,8 @@ def get_item_list_from_contract(identity_acct: Account) -> list:
 
 def add_assets_to_ipfs(img_path: str, identity_acct: Account, payer_acct: Account) -> str:
     file_folder, filename = os.path.split(img_path)
-    if ('.jpg' or '.bmp' or '.jpeg' or '.png') in filename:
-        result = ipfs.add(os.path.join(app.config['ASSETS_FOLDER'], img_path))
+    if '.jpg' in filename or '.bmp' in filename or '.jpeg' in filename or '.png' in filename:
+        result = ipfs.add(img_path)
         filename, ext = os.path.splitext(filename)
         return put_one_item_to_contract(identity_acct, result['Hash'], ext, payer_acct)
 
@@ -137,7 +144,7 @@ def get_album_from_ipfs(item_list: list):
                 if img_data is not None:
                     with open(img_path, 'wb') as f:
                         f.write(img_data)
-            except ipfsapi.exceptions as e:
+            except Exception as e:
                 print(e.args[1])
 
 
@@ -177,9 +184,9 @@ def login():
 def get_default_wallet_account_data():
     if isinstance(app.config['WALLET_MANAGER'], WalletManager):
         try:
-            default_wallet_account_data = app.config['WALLET_MANAGER'].get_default_account()
+            default_wallet_account_data = app.config['WALLET_MANAGER'].get_default_account_data()
             label = default_wallet_account_data.label
-            b58_address = default_wallet_account_data.address
+            b58_address = default_wallet_account_data.b58_address
             return json.jsonify({'label': label, 'b58_address': b58_address}), 200
         except SDKException as e:
             return json.jsonify({'result': e.args[1]}), 500
@@ -205,7 +212,8 @@ def unlock_identity():
     ont_id_password = request.json.get('ont_id_password')
     global default_identity_account
     try:
-        default_identity_account = app.config['WALLET_MANAGER'].get_account(ont_id_selected, ont_id_password)
+        default_identity_account = app.config['WALLET_MANAGER'].get_control_account_by_index(ont_id_selected, 0,
+                                                                                             ont_id_password)
     except SDKException as e:
         redirect_url = request.url.replace('unlock_identity', 'login')
         return json.jsonify({'result': e.args[1], 'redirect_url': redirect_url}), 500
@@ -226,9 +234,10 @@ def get_album_array():
     item_list = get_item_list_from_contract(default_identity_account)
     get_album_from_ipfs(item_list)
     album_img = os.listdir(app.config['ALBUM_FOLDER'])
-    for index in range(len(album_img)):
-        album_img[index] = ''.join(['/static/album/', album_img[index]])
-    return json.jsonify({'result': album_img}), 200
+    img_position = list()
+    for img in album_img:
+        img_position.append(''.join(['/static/album/', img]))
+    return json.jsonify({'result': img_position}), 200
 
 
 @app.route('/upload_file', methods=['POST'])
@@ -258,10 +267,10 @@ def query_balance():
     try:
         if asset_select == 'ONT':
             balance = app.config['ONTOLOGY'].rpc.get_balance(b58_address)
-            return json.jsonify({'result': str(balance['ont'])}), 200
+            return json.jsonify({'result': str(balance['ONT'])}), 200
         elif asset_select == 'ONG':
             balance = app.config['ONTOLOGY'].rpc.get_balance(b58_address)
-            return json.jsonify({'result': str(balance['ong'])}), 200
+            return json.jsonify({'result': str(balance['ONG'])}), 200
         else:
             return json.jsonify({'result': 'query balance failed'}), 500
     except SDKException as e:
@@ -279,7 +288,7 @@ def get_accounts():
     account_list = app.config['WALLET_MANAGER'].get_wallet().get_accounts()
     address_list = list()
     for acct in account_list:
-        acct_item = {'b58_address': acct.address, 'label': acct.label}
+        acct_item = {'b58_address': acct.b58_address, 'label': acct.label}
         address_list.append(acct_item)
     return json.jsonify({'result': address_list}), 200
 
@@ -297,8 +306,8 @@ def is_default_wallet_account_unlock():
 def create_account():
     password = request.json.get('password')
     label = request.json.get('label')
-    hex_private_key = util.get_random_bytes(32).hex()
-    app.config['WALLET_MANAGER'].create_account_from_private_key(label, password, hex_private_key)
+    hex_private_key = utils.get_random_hex_str(64)
+    app.config['WALLET_MANAGER'].create_account_from_private_key(password, hex_private_key, label)
     app.config['WALLET_MANAGER'].save()
     return json.jsonify({'hex_private_key': hex_private_key})
 
@@ -309,12 +318,11 @@ def import_account():
     password = request.json.get('password')
     hex_private_key = request.json.get('hex_private_key')
     try:
-        account = app.config['WALLET_MANAGER'].create_account_from_private_key(label, password, hex_private_key)
+        account = app.config['WALLET_MANAGER'].create_account_from_private_key(password, hex_private_key, label)
     except ValueError as e:
         return json.jsonify({'msg': 'account exists.'}), 500
-    b58_address = account.get_address()
     app.config['WALLET_MANAGER'].save()
-    return json.jsonify({'result': b58_address}), 200
+    return json.jsonify({'result': account.b58_address}), 200
 
 
 @app.route('/remove_account', methods=['POST'])
@@ -322,7 +330,7 @@ def remove_account():
     b58_address_remove = request.json.get('b58_address_remove')
     password = request.json.get('password')
     try:
-        acct = app.config['WALLET_MANAGER'].get_account(b58_address_remove, password)
+        acct = app.config['WALLET_MANAGER'].get_account_by_b58_address(b58_address_remove, password)
         if acct is None:
             return json.jsonify({'result': ''.join(['remove ', b58_address_remove, ' failed!'])}), 500
         app.config['WALLET_MANAGER'].get_wallet().remove_account(b58_address_remove)
@@ -339,7 +347,7 @@ def account_change():
     global default_wallet_account
     old_wallet_account = default_wallet_account
     try:
-        default_wallet_account = app.config['WALLET_MANAGER'].get_account(b58_address_selected, password)
+        default_wallet_account = app.config['WALLET_MANAGER'].get_account_by_b58_address(b58_address_selected, password)
     except SDKException:
         default_wallet_account = old_wallet_account
         return json.jsonify({'result': 'invalid password'}), 400
@@ -365,7 +373,7 @@ def get_identities():
 def create_identity():
     label = request.json.get('label')
     password = request.json.get('password')
-    hex_private_key = util.get_random_bytes(32).hex()
+    hex_private_key = utils.get_random_hex_str(64)
     try:
         new_identity = app.config['WALLET_MANAGER'].create_identity_from_private_key(label, password,
                                                                                      hex_private_key)
@@ -411,7 +419,8 @@ def identity_change():
     global default_identity_account
     old_identity_account = default_identity_account
     try:
-        default_identity_account = app.config['WALLET_MANAGER'].get_account(ont_id_selected, password)
+        default_identity_account = app.config['WALLET_MANAGER'].get_control_account_by_index(ont_id_selected, 0,
+                                                                                             password)
     except SDKException:
         default_identity_account = old_identity_account
         return json.jsonify({'result': 'Invalid Password'}), 501

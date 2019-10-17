@@ -130,25 +130,25 @@
         </el-tab-pane>
 
         <el-tab-pane label="Information Query">
-            <div style="margin-bottom: 15px;">
-                <el-row :gutter="20">
-                    <el-col :span="24">
-                        <el-input
-                                placeholder="Please input TxHash"
-                                type="string"
-                                v-model="eventKey"
-                                class="input-with-select">
-                            <el-select v-model="eventInfoSelect" slot="prepend" placeholder="Select">
-                                <el-option label="State" value="State"/>
-                                </el-option>
-                                <el-option label="GasConsumed" value="GasConsumed"></el-option>
-                                <el-option label="Notify" value="Notify"></el-option>
-                            </el-select>
-                            <el-button slot="append" icon="el-icon-search" @click="queryEvent"></el-button>
-                        </el-input>
-                    </el-col>
-                </el-row>
-            </div>
+{#            <div style="margin-bottom: 15px;">#}
+{#                <el-row :gutter="20">#}
+{#                    <el-col :span="24">#}
+{#                        <el-input#}
+{#                                placeholder="Please input TxHash"#}
+{#                                type="string"#}
+{#                                v-model="eventKey"#}
+{#                                class="input-with-select">#}
+{#                            <el-select v-model="eventInfoSelect" slot="prepend" placeholder="Select">#}
+{#                                <el-option label="State" value="State"/>#}
+{#                                </el-option>#}
+{#                                <el-option label="GasConsumed" value="GasConsumed"></el-option>#}
+{#                                <el-option label="Notify" value="Notify"></el-option>#}
+{#                            </el-select>#}
+{#                            <el-button slot="append" icon="el-icon-search" @click="queryEvent"></el-button>#}
+{#                        </el-input>#}
+{#                    </el-col>#}
+{#                </el-row>#}
+{#            </div>#}
 
             <div style="margin-bottom: 15px;">
                 <el-row :gutter="20">

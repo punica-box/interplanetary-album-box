@@ -6,18 +6,19 @@ import json
 import unittest
 import binascii
 
-from ontology.ont_sdk import OntologySdk
+from ontology.contract.neo.abi.abi_info import AbiInfo
+from ontology.contract.neo.invoke_function import InvokeFunction
+from ontology.sdk import Ontology
 from ontology.wallet.wallet_manager import WalletManager
-from ontology.smart_contract.neo_contract.abi.abi_info import AbiInfo
 
 from src.crypto.ecies import ECIES
 
-ontology = OntologySdk()
+ontology = Ontology()
 remote_rpc_address = 'http://polaris3.ont.io:20336'
 contract_address_hex = 'cf25ea1932ddbc9a03ce62131001d8bcdccc12ea'
 contract_address_bytearray = bytearray(binascii.a2b_hex(contract_address_hex))
 contract_address_bytearray.reverse()
-ontology.set_rpc(remote_rpc_address)
+ontology.rpc.set_address(remote_rpc_address)
 root_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 wallet_path = os.path.join(root_folder, 'wallet', 'wallet.json')
 contracts_folder = os.path.join(root_folder, 'contracts')
@@ -33,8 +34,8 @@ wallet_manager.open_wallet(wallet_path)
 password = input('password: ')
 gas_limit = 20000000
 gas_price = 500
-acct = wallet_manager.get_account('AKeDu9QW6hfAhwpvCwNNwkEQt1LkUQpBpW', password)
-ont_id_acct = wallet_manager.get_account('did:ont:AHBB3LQNpqXjCLathy7vTNgmQ1cGSj8S9Z', password)
+acct = wallet_manager.get_account_by_b58_address('AKeDu9QW6hfAhwpvCwNNwkEQt1LkUQpBpW', password)
+ont_id_acct = wallet_manager.get_control_account_by_index('did:ont:AHBB3LQNpqXjCLathy7vTNgmQ1cGSj8S9Z', 0, password)
 
 
 class TestSmartContract(unittest.TestCase):
@@ -67,10 +68,10 @@ class TestSmartContract(unittest.TestCase):
         print(item_list)
 
     def test_clear_item_list(self):
-        clear_item_list_func = abi_info.get_function('clear_item_list')
-        clear_item_list_func.set_params_value((ont_id_acct.get_address().to_array(),))
-        tx_hash = ontology.neo_vm().send_transaction(contract_address_bytearray, ont_id_acct, acct, gas_limit,
-                                                     gas_price, clear_item_list_func, False)
+        clear_item_list_func = InvokeFunction('clear_item_list')
+        clear_item_list_func.set_params_value(ont_id_acct.get_address())
+        tx_hash = ontology.rpc.send_neo_vm_transaction(contract_address_bytearray, ont_id_acct, acct, gas_price,
+                                                       gas_limit, clear_item_list_func)
         self.assertEqual(64, len(tx_hash))
 
 
