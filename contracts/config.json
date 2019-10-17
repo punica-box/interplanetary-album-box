@@ -1,0 +1,56 @@
+{
+  "defaultWallet": "wallet.json",
+  "password": {
+    "AKeDu9QW6hfAhwpvCwNNwkEQt1LkUQpBpW": "password",
+    "AHBB3LQNpqXjCLathy7vTNgmQ1cGSj8S9Z": "password"
+  },
+  "deploy": {
+    "name": "InterplanetaryAlbum",
+    "version": "v1.0.0",
+    "author": "NashMiao",
+    "email": "wdx7266@vip.qq.com",
+    "desc": "https://github.com/punica-box/interplanetary-album-box",
+    "needStorage": true,
+    "payer": "AKeDu9QW6hfAhwpvCwNNwkEQt1LkUQpBpW",
+    "gasPrice": 500,
+    "gasLimit": 21000000
+  },
+  "invoke": {
+    "address": "cf25ea1932ddbc9a03ce62131001d8bcdccc12ea",
+    "defaultPayer": "AKeDu9QW6hfAhwpvCwNNwkEQt1LkUQpBpW",
+    "defaultSigner": "AHBB3LQNpqXjCLathy7vTNgmQ1cGSj8S9Z",
+    "sleep": 6,
+    "gasPrice": 500,
+    "gasLimit": 21000000,
+    "functions": [
+      {
+        "put_one_item": [
+          "AHBB3LQNpqXjCLathy7vTNgmQ1cGSj8S9Z",
+          "encrypted_ipfs_address",
+          "ext",
+          "aes_iv",
+          "encode_g_tilde"
+        ],
+        "signers": [
+          "AHBB3LQNpqXjCLathy7vTNgmQ1cGSj8S9Z"
+        ],
+        "payer": "AKeDu9QW6hfAhwpvCwNNwkEQt1LkUQpBpW"
+      },
+      {
+        "get_item_list": [
+          "AHBB3LQNpqXjCLathy7vTNgmQ1cGSj8S9Z"
+        ],
+        "preExec": true
+      },
+      {
+        "clear_item_list": [
+          "AHBB3LQNpqXjCLathy7vTNgmQ1cGSj8S9Z"
+        ],
+        "signers": [
+          "AHBB3LQNpqXjCLathy7vTNgmQ1cGSj8S9Z"
+        ],
+        "payer": "AKeDu9QW6hfAhwpvCwNNwkEQt1LkUQpBpW"
+      }
+    ]
+  }
+}

@@ -145,7 +145,7 @@ class ECIES:
     def encrypt_with_ont_id_in_cbc(plain_text: bytes, ont_id_acct: Account):
         if not isinstance(ont_id_acct, Account):
             return b''
-        private_key_bytes = ont_id_acct.serialize_private_key()
+        private_key_bytes = ont_id_acct.get_private_key_bytes()
         public_key_bytes = ECDSA.ec_get_public_key_by_private_key(private_key_bytes)
         aes_iv, encode_g_tilde, cipher_text = ECIES.encrypt_with_cbc_mode(plain_text, public_key_bytes)
         return aes_iv, encode_g_tilde, cipher_text
@@ -154,6 +154,6 @@ class ECIES:
     def decrypt_with_ont_id_in_cbc(aes_iv: bytes, encode_g_tilde: bytes, cipher_text: bytes, ont_id_acct: Account):
         if not isinstance(ont_id_acct, Account):
             return b''
-        private_key_bytes = ont_id_acct.serialize_private_key()
+        private_key_bytes = ont_id_acct.get_private_key_bytes()
         plain_text = ECIES.decrypt_with_cbc_mode(cipher_text, private_key_bytes, aes_iv, encode_g_tilde)
         return plain_text
