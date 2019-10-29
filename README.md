@@ -13,7 +13,7 @@ pip3 install punica
 Download the `interplanetary-album-box`.
 
 ```bash
-punica unbox tutorial-token
+punica unbox interplanetary-album
 ```
 
 ## Documentation
