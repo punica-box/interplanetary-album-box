@@ -21,7 +21,7 @@ from ontology.account.account import Account
 from ontology.exception.exception import SDKException
 from ontology.wallet.wallet_manager import WalletManager
 
-from src.crypto.ecies import ECIES
+from crypto.ecies import ECIES
 
 # ipfs_daemon = subprocess.Popen("ipfs daemon", stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
 static_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')

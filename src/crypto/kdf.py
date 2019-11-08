@@ -3,7 +3,7 @@
 
 from math import ceil
 
-from src.crypto.digest import sha256
+from crypto.digest import sha256
 
 
 def str_to_bytes(s: str) -> bytes:

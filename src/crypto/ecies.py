@@ -20,10 +20,10 @@ from ecdsa.keys import (
 )
 from ontology.account.account import Account
 
-from src.crypto.aes import AESHandler
-from src.crypto.kdf import pbkdf2
+from crypto.aes import AESHandler
+from crypto.kdf import pbkdf2
 
-from src.exception.album_exception import (
+from exception.album_exception import (
     AlbumException,
     AlbumError
 )
