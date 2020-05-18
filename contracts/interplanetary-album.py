@@ -15,6 +15,7 @@ itemPutFail = RegisterAction('PutFail', 'ipfs_hash')
 itemRemove = RegisterAction('Remove', 'ipfs_hash')
 itemRemoveFail = RegisterAction('RemoveFail', 'ipfs_hash')
 
+OwnerAccountAddress=""
 
 def main(operation, args):
     if operation == 'put_one_item':

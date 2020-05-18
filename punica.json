@@ -1,4 +1,6 @@
 {
+  "IPFS_PORT": 9090,
+  "CONTRACT_ADDRESS_HEX": "02038b01aae5e9f2171c8362ffbafca1d4cff1c9",
   "networks": {
     "test": {
       "host": "http://polaris1.ont.io",
