@@ -76,9 +76,11 @@ def del_ont_item(ont_id, ipfs_hash):
     item_list = []
     if item_list_info:
         item_list = Deserialize(item_list_info)
-    for item in item_list:
-        if item[0] == ipfs_hash:
-            item_list.remove(item)
+    for i in range (0, len(item_list)):
+        if item_list[i][0] == ipfs_hash:
+            item_list.remove(i)
+            item_list_info = Serialize(item_list)
+            Put(ctx, item_key, item_list_info)
             itemRemove(ipfs_hash)
             return True
     itemRemoveFail(ipfs_hash)
