@@ -24,6 +24,8 @@ try:
     os.mkdir(ALBUM_FOLDER)
 except FileExistsError:
     pass
+
+## Default configs
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp'}
 IPFS_HOST = '127.0.0.1'
 IPFS_PORT = 5001
@@ -31,6 +33,15 @@ GAS_LIMIT = 20000000
 GAS_PRICE = 500
 ONT_RPC_ADDRESS = 'http://polaris3.ont.io:20336'
 CONTRACT_ADDRESS_HEX = 'cf25ea1932ddbc9a03ce62131001d8bcdccc12ea'
+
+## load config from punica.json
+with open(os.path.join(ROOT_FOLDER, 'punica.json')) as f:
+    punicaCfg = json.loads(f.read())
+    IPFS_HOST = punicaCfg.get('IPFS_HOST', IPFS_HOST)
+    IPFS_PORT = punicaCfg.get('IPFS_PORT', IPFS_PORT)
+    ONT_RPC_ADDRESS = punicaCfg.get('ONT_RPC_ADDRESS', ONT_RPC_ADDRESS)
+    CONTRACT_ADDRESS_HEX = punicaCfg.get('CONTRACT_ADDRESS_HEX', CONTRACT_ADDRESS_HEX)
+
 CONTRACT_ADDRESS_BYTEARRAY = bytearray(binascii.a2b_hex(CONTRACT_ADDRESS_HEX))
 CONTRACT_ADDRESS_BYTEARRAY.reverse()
 ONTOLOGY = Ontology()
