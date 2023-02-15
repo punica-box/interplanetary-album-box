@@ -4,4 +4,4 @@ Pillow==6.2.0
 Flask-JSGlue
 ipfsapi==0.4.3
 ontology-python-sdk==2.0.6
-Werkzeug==0.16
+Werkzeug==2.2.3
